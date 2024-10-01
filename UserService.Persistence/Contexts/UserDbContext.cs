@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserService.Core.Models;
 
-namespace UserService.Core.Contexts
+namespace UserService.Persistence.Contexts
 {
     public class UserDbContext(DbContextOptions opts) : DbContext(opts)
     {
