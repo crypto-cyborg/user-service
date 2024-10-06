@@ -20,12 +20,12 @@ namespace UserService.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<User>> GetAll()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<User?> GetById(int id)
+        public async Task<User?> GetByIdAsync(Guid id)
         {
             return await _context.Users.FindAsync(id);
         }
@@ -42,7 +42,7 @@ namespace UserService.Persistence.Repositories
                 query = query.Where(filter);
             }
 
-            foreach (var property in includeProperties.Split([','], StringSplitOptions.RemoveEmptyEntries))
+            foreach (var property in includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
             {
                 query.Include(property);
             }

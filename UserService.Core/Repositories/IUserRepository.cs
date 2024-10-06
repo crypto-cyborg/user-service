@@ -7,8 +7,8 @@ namespace UserService.Core.Repositories
     {
         public Task<bool> SaveAsync();
 
-        public Task<IEnumerable<User>> GetAll();
-        public Task<User?> GetById(int id);
+        public Task<IEnumerable<User>> GetAllAsync();
+        public Task<User?> GetByIdAsync(Guid id);
         public Task<IEnumerable<User>> Get(
             Expression<Func<User, bool>>? filter = null,
             Func<IQueryable<User>, IOrderedQueryable<User>>? orderBy = null,
