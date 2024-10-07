@@ -18,7 +18,7 @@ namespace UserService.Application.UseCases
 
         public async Task<UserReadDto> Invoke(Guid id)
         {
-            var user = _userRepository.GetByIdAsync(id) 
+            var user = await _userRepository.GetByIdAsync(id) 
                 ?? throw new EntityNotFoundException("User not found");
 
             var dto = _mapper.Map<UserReadDto>(user);

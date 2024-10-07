@@ -23,7 +23,7 @@ namespace UserService.API.Middlewares
         {
             var code = HttpStatusCode.InternalServerError;
 
-            var result = JsonSerializer.Serialize(ex);
+            var result = JsonSerializer.Serialize(new { ex.Message, code });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
 

@@ -28,43 +28,46 @@ namespace UserService.Endpoints
                 .WithSummary(nameof(AddUser))
                 .WithDescription("Creates new user");
 
+            app.MapDelete("users/{id}", DeleteUser)
+                .WithOpenApi()
+                .WithSummary(nameof(DeleteUser))
+                .WithDescription("Deletes the specified user by id");
+
+            app.MapPatch("users/{id}", EditUser)
+                .WithOpenApi()
+                .WithSummary(nameof(EditUser))
+                .WithDescription("Edits the specified user");
+
             return app;
         }
 
+        #region GET
         private static async Task<IResult> GetAllUsers(
-            IUserRepository userRepository)
+            GetAllUsers handler)
         {
-            return Results.Ok(await userRepository.GetAllAsync());
+            return Results.Ok(await handler.Invoke());
         }
 
         private static async Task<IResult> GetUserById(
             Guid id,
-            IUserRepository userRepository)
+            GetUserById handler)
         {
-            var user = await userRepository.GetByIdAsync(id);
-
-            if (user is null)
-            {
-                return Results.NotFound($"User not found");
-            }
+            var user = await handler.Invoke(id);
 
             return Results.Ok(user);
         }
 
         private static async Task<IResult> Exists(
             string username,
-            IUserRepository userRepository)
+            Exists handler)
         {
-            var user = (await userRepository.Get(u => u.Username == username)).First();
+            var id = await handler.Invoke(username);
 
-            if (user is null)
-            {
-                return Results.NotFound($"User does not exist");
-            }
-
-            return Results.Ok(user.Id);
+            return Results.Ok(id is null ? 0 : id);
         }
+        #endregion
 
+        #region POST
         private static async Task<IResult> AddUser(
             UserCreateDto request,
             CreateUser handler)
@@ -73,5 +76,26 @@ namespace UserService.Endpoints
 
             return Results.Ok(response);
         }
+        #endregion
+
+        #region DELETE
+        private static async Task<IResult> DeleteUser(
+            Guid id,
+            DeleteUser hander)
+        {
+            await hander.Invoke(id);
+
+            return Results.NoContent();
+        }
+        #endregion
+
+        #region Patch
+        private static async Task<IResult> EditUser(
+            Guid id,
+            )
+        {
+            return Results.Ok();
+        }
+        #endregion
     }
 }
