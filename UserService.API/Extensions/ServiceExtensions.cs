@@ -14,7 +14,7 @@ namespace UserService.API.Extensions
 
             services.AddScoped<DeleteUser>();
 
-            services.AddScoped<EditUser>();
+            services.AddScoped<PatchUser>();
         }
     }
 }

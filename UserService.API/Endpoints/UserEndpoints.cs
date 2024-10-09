@@ -1,5 +1,6 @@
 ﻿using UserService.Application.Data.Dtos;
 using UserService.Application.UseCases;
+using UserService.Application.Validators;
 using UserService.Core.Repositories;
 
 namespace UserService.Endpoints
@@ -92,9 +93,20 @@ namespace UserService.Endpoints
         #region Patch
         private static async Task<IResult> EditUser(
             Guid id,
-            )
+            UserPatchDto request,
+            PatchUser handler,
+            UserPatchValidator validator)
         {
-            return Results.Ok();
+            var validationResult = await validator.ValidateAsync(request);
+
+            if (!validationResult.IsValid)
+            {
+                return Results.BadRequest(validationResult.Errors);
+            }
+
+            var patchedUser = await handler.Invoke(id, request);
+
+            return Results.Ok(patchedUser);
         }
         #endregion
     }

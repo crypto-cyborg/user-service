@@ -24,6 +24,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<UserCreateValidator>();
+builder.Services.AddScoped<UserPatchValidator>();
 
 builder.Services.AddUseCases();
 
