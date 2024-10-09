@@ -1,7 +1,6 @@
 ﻿using UserService.Application.Data.Dtos;
 using UserService.Application.UseCases;
 using UserService.Application.Validators;
-using UserService.Core.Repositories;
 
 namespace UserService.Endpoints
 {

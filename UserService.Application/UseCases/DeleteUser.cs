@@ -15,7 +15,9 @@ namespace UserService.Application.UseCases
         public async Task Invoke(Guid id)
         {
             var user = await _userRepository.GetByIdAsync(id)
-                ?? throw new EntityNotFoundException("Required user does not exist");
+                ?? throw new UserServiceException(
+                    UserServiceErrorTypes.ENTITY_NOT_FOUND, 
+                    "Required user does not exist");
 
             _userRepository.Delete(user);
 

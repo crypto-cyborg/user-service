@@ -21,7 +21,9 @@ namespace UserService.Application.UseCases
             UserPatchDto request)
         {
             var user = await _userRepository.GetByIdAsync(id)
-                ?? throw new EntityNotFoundException("User not found");
+                ?? throw new UserServiceException(
+                    UserServiceErrorTypes.ENTITY_NOT_FOUND, 
+                    "User not found");
 
             if (request.Username is not null)
                 user.Username = request.Username;
