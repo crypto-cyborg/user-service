@@ -17,6 +17,11 @@ namespace UserService.Application.UseCases
             var user = (await _userRepository.Get(u => u.Username == username))
                 .FirstOrDefault();
 
+            if (user is null)
+            {
+                return null;
+            }
+
             return user.Id;
         }
     }

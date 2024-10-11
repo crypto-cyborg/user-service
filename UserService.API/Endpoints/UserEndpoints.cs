@@ -63,7 +63,13 @@ namespace UserService.Endpoints
         {
             var id = await handler.Invoke(username);
 
-            return Results.Ok(id is null ? 0 : id);
+            var response = new ExistsDto()
+            {
+                Found = id is not null,
+                Data = id
+            };
+
+            return Results.Ok(response);
         }
         #endregion
 
