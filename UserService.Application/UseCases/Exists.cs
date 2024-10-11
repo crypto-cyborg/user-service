@@ -15,7 +15,7 @@ namespace UserService.Application.UseCases
         public async Task<Guid?> Invoke(string username)
         {
             var user = (await _userRepository.Get(u => u.Username == username))
-                .First();
+                .FirstOrDefault();
 
             return user.Id;
         }
