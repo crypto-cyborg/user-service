@@ -16,14 +16,14 @@ namespace UserService.Application.UseCases
             _mapper = mapper;
         }
 
-        public async Task<UserReadDto> Invoke(
-            Guid id,
-            UserPatchDto request)
+        public async Task<UserReadDto> Invoke(Guid id, UserPatchDto request)
         {
-            var user = await _userRepository.GetByIdAsync(id)
+            var user =
+                await _userRepository.GetByIdAsync(id)
                 ?? throw new UserServiceException(
-                    UserServiceErrorTypes.ENTITY_NOT_FOUND, 
-                    "User not found");
+                    UserServiceErrorTypes.ENTITY_NOT_FOUND,
+                    "User not found"
+                );
 
             if (request.Username is not null)
                 user.Username = request.Username;
@@ -39,6 +39,14 @@ namespace UserService.Application.UseCases
 
             if (request.LastName is not null)
                 user.LastName = request.LastName;
+
+            if (request.RefreshToken is not null)
+                user.RefreshToken = request.RefreshToken;
+
+            if (user.RefreshTokenExpiryTime < request.RefreshTokenExpiryTime)
+            {
+                user.RefreshTokenExpiryTime = request.RefreshTokenExpiryTime;
+            }
 
             await _userRepository.SaveAsync();
 
