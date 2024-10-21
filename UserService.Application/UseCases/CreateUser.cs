@@ -2,7 +2,6 @@
 using AutoMapper;
 using FluentValidation;
 using UserService.Application.Data.Dtos;
-using UserService.Application.UseCases.Interfaces;
 using UserService.Application.Validators;
 using UserService.Core.Models;
 using UserService.Core.Repositories;

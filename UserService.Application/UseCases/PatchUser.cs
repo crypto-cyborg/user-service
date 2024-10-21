@@ -34,6 +34,8 @@ namespace UserService.Application.UseCases
             if (request.Email is not null)
                 user.Email = request.Email;
 
+            user.IsEmailConfirmed = request.IsEmailConfirmed;
+
             if (request.FirstName is not null)
                 user.FirstName = request.FirstName;
 
