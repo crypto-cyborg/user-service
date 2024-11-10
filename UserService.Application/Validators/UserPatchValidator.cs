@@ -20,13 +20,6 @@ namespace UserService.Application.Validators
                     .MaximumLength(50).WithMessage("Username must be less than 50 characters.");
             });
 
-            When(x => !string.IsNullOrEmpty(x.Password), () =>
-            {
-                RuleFor(x => x.Password)
-                    .MinimumLength(8).WithMessage("Password must be at least 8 characters long.")
-                    .MaximumLength(100).WithMessage("Password must be less than 100 characters.");
-            });
-
             When(x => !string.IsNullOrEmpty(x.Email), () =>
             {
                 RuleFor(x => x.Email)

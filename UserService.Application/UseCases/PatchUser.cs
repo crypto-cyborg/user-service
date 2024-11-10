@@ -2,6 +2,7 @@
 using UserService.Application.Data.Dtos;
 using UserService.Core.Exceptions;
 using UserService.Core.Repositories;
+using UserService.Core.Utils;
 
 namespace UserService.Application.UseCases
 {
@@ -28,8 +29,15 @@ namespace UserService.Application.UseCases
             if (request.Username is not null)
                 user.Username = request.Username;
 
-            if (request.Password is not null)
-                user.PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password);
+            if (request.PasswordHash is not null)
+            {
+                if (!request.PasswordHash.IsBCryptHash())
+                {
+                    request.PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(request.PasswordHash);
+                }
+
+                user.PasswordHash = request.PasswordHash;
+            }
 
             if (request.Email is not null)
                 user.Email = request.Email;
