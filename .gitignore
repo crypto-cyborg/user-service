@@ -1,6 +1,7 @@
 # folders
 .vs/
 .vscode/
+.idea/
 obj/
 bin/
 
