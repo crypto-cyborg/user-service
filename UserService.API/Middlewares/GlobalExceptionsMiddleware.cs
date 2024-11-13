@@ -12,37 +12,26 @@ namespace UserService.API.Middlewares
             {
                 await next(context);
             }
-            catch (UserServiceException ex)
-            {
-                await HandleExceptionAsync(context, ex);
-            }
             catch (Exception ex)
             {
                 await HandleExceptionAsync(context, ex);
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, UserServiceException ex)
-        {
-            var code = HttpStatusCode.InternalServerError;
-
-            switch (ex.Type)
-            {
-                case UserServiceErrorTypes.ENTITY_NOT_FOUND:
-                    code = HttpStatusCode.NotFound;
-                    break;
-            }
-
-            var result = JsonSerializer.Serialize(new { ex.Message, code });
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)code;
-
-            return context.Response.WriteAsync(result);
-        }
-
         private Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
             var code = HttpStatusCode.InternalServerError;
+
+            if (ex is UserServiceException usex)
+            {
+                code = usex.Type switch 
+                {
+                    UserServiceErrorTypes.ENTITY_NOT_FOUND => HttpStatusCode.NotFound,
+                    UserServiceErrorTypes.INVALID_USERNAME => HttpStatusCode.Forbidden,
+                    UserServiceErrorTypes.INVALID_EMAIL => HttpStatusCode.Forbidden,
+                    _ => code
+                };
+            }
 
             var result = JsonSerializer.Serialize(new { ex.Message, code });
             context.Response.ContentType = "application/json";
