@@ -1,8 +1,8 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using FluentValidation;
 using UserService.Application.Data.Dtos;
 using UserService.Application.Validators;
+using UserService.Core.Exceptions;
 using UserService.Core.Models;
 using UserService.Core.Repositories;
 
@@ -33,7 +33,19 @@ namespace UserService.Application.UseCases
                 throw new ValidationException(validationResult.Errors);
             }
 
-            // TODO: Check if user is unique
+            if ((await _userRepository.Get(u => u.Username == request.Username)).Any())
+            {
+                throw new UserServiceException(
+                    UserServiceErrorTypes.INVALID_USERNAME,
+                    "Username should be unique");
+            }
+
+            if ((await _userRepository.Get(u => u.Email == request.Email)).Any())
+            {
+                throw new UserServiceException(
+                    UserServiceErrorTypes.INVALID_EMAIL,
+                    "Username should be unique");
+            }
 
             var user = _mapper.Map<User>(request);
             user.PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password);
