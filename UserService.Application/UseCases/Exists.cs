@@ -1,20 +1,21 @@
 ﻿using UserService.Core.Exceptions;
+using UserService.Core.Models;
 using UserService.Core.Repositories;
 
 namespace UserService.Application.UseCases
 {
     public class Exists
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IRepository<User> _repository;
 
-        public Exists(IUserRepository userRepository)
+        public Exists(IRepository<User> repository)
         {
-            _userRepository = userRepository;
+            _repository = repository;
         }
 
         public async Task<Guid?> Invoke(string username)
         {
-            var user = (await _userRepository.Get(u => u.Username == username))
+            var user = (await _repository.GetAsync(u => u.Username == username))
                 .FirstOrDefault();
 
             if (user is null)

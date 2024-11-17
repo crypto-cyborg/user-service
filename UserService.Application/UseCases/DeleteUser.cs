@@ -1,29 +1,30 @@
 ﻿using UserService.Core.Exceptions;
+using UserService.Core.Models;
 using UserService.Core.Repositories;
 
 namespace UserService.Application.UseCases
 {
     public class DeleteUser
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IRepository<User> _repository;
 
-        public DeleteUser(IUserRepository userRepository)
+        public DeleteUser(IRepository<User> repository)
         {
-            _userRepository = userRepository;
+            _repository = repository;
         }
 
         public async Task Invoke(Guid id)
         {
-            var user = await _userRepository.GetByIdAsync(id)
+            var user = await _repository.GetByIdAsync(id)
                 ?? throw new UserServiceException(
                     UserServiceErrorTypes.ENTITY_NOT_FOUND, 
                     "Required user does not exist");
 
-            _userRepository.Delete(user);
+            _repository.Delete(user);
 
-            await _userRepository.SaveAsync();
+            await _repository.SaveAsync();
 
-            _userRepository.Delete(user);
+            _repository.Delete(user);
         }
     }
 }

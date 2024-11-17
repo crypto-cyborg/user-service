@@ -10,16 +10,16 @@ namespace UserService.Application.UseCases
 {
     public class CreateUser
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IRepository<User> _repository;
         private readonly IMapper _mapper;
         private readonly UserCreateValidator _validator;
 
         public CreateUser(
-            IUserRepository userRepository,
+            IRepository<User> repository,
             IMapper mapper,
             UserCreateValidator validator)
         {
-            _userRepository = userRepository;
+            _repository = repository;
             _mapper = mapper;
             _validator = validator;
         }
@@ -33,14 +33,14 @@ namespace UserService.Application.UseCases
                 throw new ValidationException(validationResult.Errors);
             }
 
-            if ((await _userRepository.Get(u => u.Username == request.Username)).Any())
+            if ((await _repository.GetAsync(u => u.Username == request.Username)).Any())
             {
                 throw new UserServiceException(
                     UserServiceErrorTypes.INVALID_USERNAME,
                     "Username should be unique");
             }
 
-            if ((await _userRepository.Get(u => u.Email == request.Email)).Any())
+            if ((await _repository.GetAsync(u => u.Email == request.Email)).Any())
             {
                 throw new UserServiceException(
                     UserServiceErrorTypes.INVALID_EMAIL,
@@ -50,8 +50,8 @@ namespace UserService.Application.UseCases
             var user = _mapper.Map<User>(request);
             user.PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password);
 
-            await _userRepository.Insert(user);
-            await _userRepository.SaveAsync();
+            await _repository.InsertAsync(user);
+            await _repository.SaveAsync();
 
             return _mapper.Map<UserReadDto>(user);
         }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using UserService.Application.Data.Dtos;
 using UserService.Core.Exceptions;
+using UserService.Core.Models;
 using UserService.Core.Repositories;
 using UserService.Core.Utils;
 
@@ -8,19 +9,19 @@ namespace UserService.Application.UseCases
 {
     public class PatchUser
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IRepository<User> _repository;
         private readonly IMapper _mapper;
 
-        public PatchUser(IUserRepository userRepository, IMapper mapper)
+        public PatchUser(IRepository<User> repository, IMapper mapper)
         {
-            _userRepository = userRepository;
+            _repository = repository;
             _mapper = mapper;
         }
 
         public async Task<UserReadDto> Invoke(Guid id, UserPatchDto request)
         {
             var user =
-                await _userRepository.GetByIdAsync(id)
+                await _repository.GetByIdAsync(id)
                 ?? throw new UserServiceException(
                     UserServiceErrorTypes.ENTITY_NOT_FOUND,
                     "User not found"
@@ -58,7 +59,7 @@ namespace UserService.Application.UseCases
                 user.RefreshTokenExpiryTime = request.RefreshTokenExpiryTime;
             }
 
-            await _userRepository.SaveAsync();
+            await _repository.SaveAsync();
 
             return _mapper.Map<UserReadDto>(user);
         }

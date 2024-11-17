@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using UserService.API.Extensions;
 using UserService.API.Middlewares;
 using UserService.Application.Validators;
+using UserService.Core.Models;
 using UserService.Core.Repositories;
 using UserService.Endpoints;
 using UserService.Persistence.Contexts;
@@ -29,7 +30,8 @@ builder.Services.AddDbContext<UserDbContext>(opts =>
     opts.UseInMemoryDatabase("UsersInMemo");
 });
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRepository<User>, UserRepository>();
+builder.Services.AddScoped<IRepository<Role>, RolesRepository>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
