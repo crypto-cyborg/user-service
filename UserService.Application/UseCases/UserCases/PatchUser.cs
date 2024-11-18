@@ -5,7 +5,7 @@ using UserService.Core.Models;
 using UserService.Core.Repositories;
 using UserService.Core.Utils;
 
-namespace UserService.Application.UseCases
+namespace UserService.Application.UseCases.UserCases
 {
     public class PatchUser
     {

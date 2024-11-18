@@ -7,29 +7,29 @@ namespace UserService.Persistence.Repositories
 {
     public class RepositoryBase<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private readonly DbSet<TEntity> _dbSet;
+        protected readonly DbSet<TEntity> DbSet;
         private readonly UserDbContext _context;
 
         protected RepositoryBase(UserDbContext context)
         {
             _context = context;
-            _dbSet = context.Set<TEntity>();
+            DbSet = context.Set<TEntity>();
         }
 
         public async Task<bool> SaveAsync()
             => await _context.SaveChangesAsync() > 0;
 
-        public async Task<TEntity?> GetByIdAsync(object id)
+        public virtual async Task<TEntity?> GetByIdAsync(object id)
         {
-            return await _dbSet.FindAsync(id);
+            return await DbSet.FindAsync(id);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAsync(
+        public virtual async Task<IEnumerable<TEntity>> GetAsync(
             Expression<Func<TEntity, bool>>? filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             string includeProperties = "")
         {
-            var query = _dbSet.AsQueryable();
+            var query = DbSet.AsQueryable();
 
             if (filter is not null)
             {
@@ -50,22 +50,22 @@ namespace UserService.Persistence.Repositories
 
         public async Task InsertAsync(TEntity entity)
         {
-            await _dbSet.AddAsync(entity);
+            await DbSet.AddAsync(entity);
         }
 
         public void Delete(TEntity entity)
         {
             if (_context.Entry(entity).State == EntityState.Detached)
             {
-                _dbSet.Attach(entity);
+                DbSet.Attach(entity);
             }
 
-            _dbSet.Remove(entity);
+            DbSet.Remove(entity);
         }
 
         public void Delete(object id)
         {
-            var entity = _dbSet.Find(id);
+            var entity = DbSet.Find(id);
 
             if (entity is null)
             {

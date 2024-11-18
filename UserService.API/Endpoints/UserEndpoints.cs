@@ -1,8 +1,9 @@
 ﻿using UserService.Application.Data.Dtos;
 using UserService.Application.UseCases;
+using UserService.Application.UseCases.UserCases;
 using UserService.Application.Validators;
 
-namespace UserService.Endpoints
+namespace UserService.API.Endpoints
 {
     public static class UserEndpoints
     {
@@ -13,7 +14,7 @@ namespace UserService.Endpoints
                 .WithSummary(nameof(GetAllUsers))
                 .WithDescription("Returns a list of all users");
 
-            app.MapGet("users/{id}", GetUserById)
+            app.MapGet("users/{id:guid}", GetUserById)
                 .WithOpenApi()
                 .WithSummary(nameof(GetUserById))
                 .WithDescription("Returns a specified user by id");
@@ -28,12 +29,12 @@ namespace UserService.Endpoints
                 .WithSummary(nameof(AddUser))
                 .WithDescription("Creates new user");
 
-            app.MapDelete("users/{id}", DeleteUser)
+            app.MapDelete("users/{id:guid}", DeleteUser)
                 .WithOpenApi()
                 .WithSummary(nameof(DeleteUser))
                 .WithDescription("Deletes the specified user by id");
 
-            app.MapPatch("users/{id}", EditUser)
+            app.MapPatch("users/{id:guid}", EditUser)
                 .WithOpenApi()
                 .WithSummary(nameof(EditUser))
                 .WithDescription("Edits the specified user");

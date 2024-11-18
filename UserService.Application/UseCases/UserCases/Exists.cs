@@ -1,8 +1,7 @@
-﻿using UserService.Core.Exceptions;
-using UserService.Core.Models;
+﻿using UserService.Core.Models;
 using UserService.Core.Repositories;
 
-namespace UserService.Application.UseCases
+namespace UserService.Application.UseCases.UserCases
 {
     public class Exists
     {
@@ -18,12 +17,7 @@ namespace UserService.Application.UseCases
             var user = (await _repository.GetAsync(u => u.Username == username))
                 .FirstOrDefault();
 
-            if (user is null)
-            {
-                return null;
-            }
-
-            return user.Id;
+            return user?.Id;
         }
     }
 }

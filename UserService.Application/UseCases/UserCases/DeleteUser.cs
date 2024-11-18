@@ -2,7 +2,7 @@
 using UserService.Core.Models;
 using UserService.Core.Repositories;
 
-namespace UserService.Application.UseCases
+namespace UserService.Application.UseCases.UserCases
 {
     public class DeleteUser
     {

@@ -13,7 +13,10 @@ namespace UserService.Application.Profiles
                     target => target.PasswordHash,
                     opt => opt.MapFrom(target => target.Password));
 
-            CreateMap<User, UserReadDto>();
+            CreateMap<User, UserReadDto>()
+                .ForMember(
+                    target => target.Roles,
+                    opt => opt.MapFrom(target => target.UserRoles.Select(ur => ur.Role)));
         }
     }
 }

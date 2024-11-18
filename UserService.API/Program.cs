@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using UserService.API.Endpoints;
 using UserService.API.Extensions;
 using UserService.API.Middlewares;
+using UserService.Application.Services;
+using UserService.Application.Services.Interfaces;
 using UserService.Application.Validators;
 using UserService.Core.Models;
 using UserService.Core.Repositories;
-using UserService.Endpoints;
 using UserService.Persistence.Contexts;
 using UserService.Persistence.Repositories;
 
@@ -38,7 +40,10 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<UserCreateValidator>();
 builder.Services.AddScoped<UserPatchValidator>();
 
-builder.Services.AddUseCases();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
+builder.Services.AddUserCases();
+builder.Services.AddRoleCases();
 
 var app = builder.Build();
 
@@ -55,5 +60,6 @@ app.UseHttpsRedirection();
 app.UseMiddleware<GlobalExceptionsMiddleware>();
 
 app.MapUserEndpoints();
+app.MapRoleEndpoint();
 
 app.Run();
