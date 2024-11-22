@@ -6,6 +6,6 @@ obj/
 bin/
 
 # files
-app-settings.json
-app-settings.Development.json
+appsettings.json
+appsettings.Development.json
 *.user
