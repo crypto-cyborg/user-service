@@ -29,7 +29,7 @@ builder.Services.AddScoped<GlobalExceptionsMiddleware>();
 
 builder.Services.AddDbContext<UserDbContext>(opts =>
 {
-    opts.UseInMemoryDatabase("UsersInMemo");
+    opts.UseSqlServer(builder.Configuration.GetConnectionString("ccdb-users"));
 });
 
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
