@@ -7,6 +7,8 @@ namespace UserService.Application.Data.Dtos
         [Required] string Password,
         [Required] string ConfirmPassword,
         [Required] string Email,
+        [Required] string ApiKey,
+        [Required] string SecretKey,
         [Required] string FirstName,
         [Required] string LastName
     );

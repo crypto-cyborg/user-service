@@ -1,3 +1,5 @@
+using AuthService.Application.Services;
+using AuthService.Application.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using UserService.API.Endpoints;
 using UserService.API.Extensions;
@@ -41,6 +43,7 @@ builder.Services.AddScoped<UserCreateValidator>();
 builder.Services.AddScoped<UserPatchValidator>();
 
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IBlobService, BlobService>();
 
 builder.Services.AddUserCases();
 builder.Services.AddRoleCases();
@@ -57,7 +60,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseMiddleware<GlobalExceptionsMiddleware>();
+// app.UseMiddleware<GlobalExceptionsMiddleware>();
 
 app.MapUserEndpoints();
 app.MapRoleEndpoint();

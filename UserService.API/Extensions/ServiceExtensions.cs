@@ -24,6 +24,7 @@ namespace UserService.API.Extensions
             services.AddScoped<CreateRole>();
             services.AddScoped<GrantRole>();
             services.AddScoped<RevokeRole>();
+            services.AddScoped<UploadProfileImage>();
         }
     }
 }

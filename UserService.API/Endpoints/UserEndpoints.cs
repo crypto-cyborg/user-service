@@ -1,5 +1,5 @@
-﻿using UserService.Application.Data.Dtos;
-using UserService.Application.UseCases;
+﻿using Microsoft.AspNetCore.Mvc;
+using UserService.Application.Data.Dtos;
 using UserService.Application.UseCases.UserCases;
 using UserService.Application.Validators;
 
@@ -29,6 +29,13 @@ namespace UserService.API.Endpoints
                 .WithSummary(nameof(AddUser))
                 .WithDescription("Creates new user");
 
+            app.MapPost("users/{userId:guid}/image", UploadProfileImage)
+                .WithOpenApi()
+                .Accepts<IFormFile>("multipart/form-data")
+                .WithSummary(nameof(UploadProfileImage))
+                .WithDescription("Lets user to upload profile image")
+                .DisableAntiforgery();
+
             app.MapDelete("users/{id:guid}", DeleteUser)
                 .WithOpenApi()
                 .WithSummary(nameof(DeleteUser))
@@ -43,6 +50,7 @@ namespace UserService.API.Endpoints
         }
 
         #region GET
+
         private static async Task<IResult> GetAllUsers(
             GetAllUsers handler)
         {
@@ -72,9 +80,11 @@ namespace UserService.API.Endpoints
 
             return Results.Ok(response);
         }
+
         #endregion
 
         #region POST
+
         private static async Task<IResult> AddUser(
             UserCreateDto request,
             CreateUser handler)
@@ -83,9 +93,28 @@ namespace UserService.API.Endpoints
 
             return Results.Ok(response);
         }
+
+        private static async Task<IResult> UploadProfileImage(
+            Guid userId,
+            [FromForm] IFormFile image,
+            UploadProfileImage handler)
+        {
+            if (image.Length == 0)
+            {
+                return Results.BadRequest("Uploaded file is invalid");
+            }
+
+            var result = await handler.Invoke(userId, image);
+
+            return result.Match(
+                res => Results.Ok(res),
+                err => Results.BadRequest(err));
+        }
+
         #endregion
 
         #region DELETE
+
         private static async Task<IResult> DeleteUser(
             Guid id,
             DeleteUser hander)
@@ -94,9 +123,11 @@ namespace UserService.API.Endpoints
 
             return Results.NoContent();
         }
+
         #endregion
 
         #region Patch
+
         private static async Task<IResult> EditUser(
             Guid id,
             UserPatchDto request,
@@ -114,6 +145,7 @@ namespace UserService.API.Endpoints
 
             return Results.Ok(patchedUser);
         }
+
         #endregion
     }
 }
