@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using Microsoft.VisualBasic;
 using UserService.Application.Data.Dtos;
 using UserService.Application.Services.Interfaces;
 using UserService.Application.Validators;
