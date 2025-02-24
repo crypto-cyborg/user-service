@@ -9,39 +9,40 @@ namespace UserService.API.Endpoints
     {
         public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapGet("users", GetAllUsers)
+            var usersGroup = app.MapGroup("users");
+            usersGroup.MapGet("/", GetAllUsers)
                 .WithOpenApi()
                 .WithSummary(nameof(GetAllUsers))
                 .WithDescription("Returns a list of all users");
 
-            app.MapGet("users/{id:guid}", GetUserById)
+            usersGroup.MapGet("{id:guid}", GetUserById)
                 .WithOpenApi()
                 .WithSummary(nameof(GetUserById))
                 .WithDescription("Returns a specified user by id");
 
-            app.MapGet("users/{username}/exists", Exists)
+            usersGroup.MapGet("{username}/exists", Exists)
                 .WithOpenApi()
                 .WithSummary(nameof(Exists))
                 .WithDescription("Checks if user exists");
 
-            app.MapPost("users", AddUser)
+            usersGroup.MapPost("/", AddUser)
                 .WithOpenApi()
                 .WithSummary(nameof(AddUser))
                 .WithDescription("Creates new user");
 
-            app.MapPost("users/{userId:guid}/image", UploadProfileImage)
+            usersGroup.MapPost("{userId:guid}/image", UploadProfileImage)
                 .WithOpenApi()
                 .Accepts<IFormFile>("multipart/form-data")
                 .WithSummary(nameof(UploadProfileImage))
                 .WithDescription("Lets user to upload profile image")
                 .DisableAntiforgery();
 
-            app.MapDelete("users/{id:guid}", DeleteUser)
+            usersGroup.MapDelete("{id:guid}", DeleteUser)
                 .WithOpenApi()
                 .WithSummary(nameof(DeleteUser))
                 .WithDescription("Deletes the specified user by id");
 
-            app.MapPatch("users/{id:guid}", EditUser)
+            usersGroup.MapPatch("{id:guid}", EditUser)
                 .WithOpenApi()
                 .WithSummary(nameof(EditUser))
                 .WithDescription("Edits the specified user");

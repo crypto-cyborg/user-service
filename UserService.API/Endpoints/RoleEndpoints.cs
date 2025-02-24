@@ -8,22 +8,23 @@ public static class RoleEndpoints
 {
     public static IEndpointRouteBuilder MapRoleEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapGet("roles", GetAllRoles)
+        var roleGroup = app.MapGroup("roles");
+        roleGroup.MapGet("/", GetAllRoles)
             .WithOpenApi()
             .WithSummary(nameof(GetAllRoles))
             .WithDescription("Returns a list of roles");
 
-        app.MapPost("roles", CreateRole)
+        roleGroup.MapPost("/", CreateRole)
             .WithOpenApi()
             .WithSummary(nameof(CreateRole))
             .WithDescription("Creates new app role");
         
-        app.MapPatch("{userId:guid}/provide", Grant)
+        roleGroup.MapPatch("{userId:guid}/provide", Grant)
             .WithOpenApi()
             .WithSummary(nameof(Grant))
             .WithDescription("Provides a role to the user");
 
-        app.MapPatch("{userId:guid}/revoke", Revoke)
+        roleGroup.MapPatch("{userId:guid}/revoke", Revoke)
             .WithOpenApi()
             .WithSummary(nameof(Revoke))
             .WithDescription("Revokes a role from the user");
